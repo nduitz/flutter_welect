@@ -35,9 +35,6 @@ class WebViewExampleState extends State<WebViewExample> {
       onPageStarted: (Void) {
         injectWelectMessageListener(_controller, context);
       },
-      onPageFinished: (Void) {
-        injectWelectMessageListener(_controller, context);
-      },
       javascriptChannels: <JavascriptChannel>[
         _welectJavascriptChannel(context),
       ].toSet(),
@@ -51,6 +48,10 @@ class WebViewExampleState extends State<WebViewExample> {
         onMessageReceived: (JavascriptMessage message) {
           var eventData = jsonDecode(message.message);
           switch (eventData['type']) {
+            // if this event has been received the user watched a video successfully
+            // the token can be configured to be valid for a specific time by welect
+            // you can check wether the token is valid or not by calling:
+            // https://www.welect.de/api/v1/lease_token/${token} (return {valid: true | false})
             case "welect:payload":
               print('process finished, token: ${eventData['payload']}');
               break;
